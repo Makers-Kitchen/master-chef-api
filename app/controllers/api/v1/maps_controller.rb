@@ -123,20 +123,22 @@ class Api::V1::MapsController < ApplicationController
         pins = Pin.select("*")
         pins.each do |pin|
             profile = get_profile(pin.user_id)
-            maker = { 
-                name: profile['real_name'], 
-                display_name: profile['display_name'], 
-                username: pin['user_name'], 
-                current_location: pin['location'], 
-                avatar: profile['image_512']
-            }
-            makers.push(maker)
+            if !profile.nil?
+                maker = { 
+                    name: profile['real_name'], 
+                    display_name: profile['display_name'], 
+                    username: pin['user_name'], 
+                    current_location: pin['location'], 
+                    avatar: profile['image_512']
+                }
+                makers.push(maker)
+            end
         end
         render :json => makers
     end
 
     def get_profile slack_user_id
-        token = 'xoxp-394441928593-394981941026-516554471987-63bc71212b6a8042e07cc331ac84dd70'
+        token = 'xoxp-394441928593-394981941026-518232906759-a82b46cd8fb1fb82f066f42ff1fb48f9'
         uri = URI('https://slack.com/api/users.profile.get?token=' + token + '&user=' + slack_user_id)
         result = Net::HTTP.get(uri)
         response = ActiveSupport::JSON.decode(result) 
