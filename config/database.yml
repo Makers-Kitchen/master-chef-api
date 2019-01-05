@@ -1,0 +1,26 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  # For details on connection pooling, see rails configuration guide
+  # http://guides.rubyonrails.org/configuring.html#database-pooling
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+
+development:
+  <<: *default
+  database: d4dc2b0r3fgq1o
+  username: ytmbscgtjtfcrj
+  password: ba4fcaf470236a14a6f86b104796ef7b7e4641a34f0c4731386e8387ff695cdd
+  host: ec2-54-225-89-195.compute-1.amazonaws.com
+  port: 5432
+
+test:
+  <<: *default
+  database: kitchen_test
+
+production:
+  <<: *default
+  database: d4dc2b0r3fgq1o
+  username: ytmbscgtjtfcrj
+  password: ba4fcaf470236a14a6f86b104796ef7b7e4641a34f0c4731386e8387ff695cdd
+  host: ec2-54-225-89-195.compute-1.amazonaws.com
+  port: 5432
