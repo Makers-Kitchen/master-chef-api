@@ -138,7 +138,7 @@ class Api::V1::MapsController < ApplicationController
     end
 
     def get_profile slack_user_id
-        uri = URI('https://slack.com/api/users.profile.get?token=' + ENV["SLACK_TOKEN"] + '&user=' + slack_user_id)
+        uri = URI('https://slack.com/api/users.profile.get?token=' + ENV["slack_token"].to_s + '&user=' + slack_user_id)
         result = Net::HTTP.get(uri)
         response = ActiveSupport::JSON.decode(result) 
         return response['profile']
