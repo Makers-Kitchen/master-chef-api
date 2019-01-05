@@ -1,3 +1,7 @@
+require 'net/http'
+require 'uri'
+require 'json'
+
 class Api::V1::MapsController < ApplicationController
     protect_from_forgery with: :null_session
 
@@ -115,8 +119,28 @@ class Api::V1::MapsController < ApplicationController
     end
 
     def list_all
+        makers = Array.new
         pins = Pin.select("*")
-        render :json => pins
+        pins.each do |pin|
+            profile = get_profile(pin.user_id)
+            maker = { 
+                name: profile['real_name'], 
+                display_name: profile['display_name'], 
+                username: pin['user_name'], 
+                current_location: pin['location'], 
+                avatar: profile['image_512']
+            }
+            makers.push(maker)
+        end
+        render :json => makers
+    end
+
+    def get_profile slack_user_id
+        token = 'xoxp-394441928593-394981941026-516554471987-63bc71212b6a8042e07cc331ac84dd70'
+        uri = URI('https://slack.com/api/users.profile.get?token=' + token + '&user=' + slack_user_id)
+        result = Net::HTTP.get(uri)
+        response = ActiveSupport::JSON.decode(result) 
+        return response['profile']
     end
 
     def find
